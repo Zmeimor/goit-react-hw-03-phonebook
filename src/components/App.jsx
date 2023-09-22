@@ -16,17 +16,10 @@ export class  App extends Component {
     filter: '',
   }
 
-// componentDidUpdate(prevProps, prevState){
-  
-//   if (this.state.contacts !== prevState.contacts) {
-//     localStorage.setItem('contacts',JSON.stringify(this.state.contacts));
-//   }
-// };
-
   formSubmitHandler = data => {
-    const searchSameName = this.state.contacts
-    .map((cont) => cont.name)
-    .includes(data.name);
+    const searchSameName = this.state.contacts.some(
+      cont => cont.name.toLowerCase() === data.name.toLowerCase()
+    );
 
     if (searchSameName) {
       alert(`${data.name} is already in contacts`);
@@ -77,7 +70,6 @@ export class  App extends Component {
     componentDidUpdate(prevState) {
   
       if (this.state.contacts !== prevState.contacts) {
-        console.log('contacts were updated');
         localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
       }
     }
@@ -103,9 +95,9 @@ export class  App extends Component {
       <>
       <Form onSubmit = {this.formSubmitHandler}/>
       <h2>Contacts</h2>
-        {visibleContacts.length > 1 && (
+        {
           <Filter value={filter} onChangeFilter={this.changeFilter} />
-        )}
+        }
         {visibleContacts.length > 0 && (
           <ContactList
             contacts={visibleContacts}
